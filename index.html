@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luc Gerards | Applied Data Science & AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables - Color Palette & Theming */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-primary: #38bdf8;
+            --accent-secondary: #818cf8;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(15, 23, 42, 0.7);
+        }
+
+        body.light-mode {
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-primary: #0284c7;
+            --accent-secondary: #4f46e5;
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --nav-bg: rgba(248, 250, 252, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.7;
+            transition: all 0.5s ease;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 { color: var(--text-main); font-weight: 700; }
+        p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1.05rem; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section { padding: 120px 0; }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.5s ease;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px;}
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 0.95rem; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--accent-primary); }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+
+        /* Hero Section */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+        .hero h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -2px; }
+        .hero h2 { font-size: 1.4rem; font-weight: 400; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 700px; line-height: 1.6; }
+
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #fff !important;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5); }
+
+        /* Skills Layout */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .skill-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s ease;
+        }
+        .skill-card:hover { transform: translateY(-10px); border-color: var(--accent-secondary); }
+        .skill-card h3 { font-size: 1.4rem; margin-bottom: 15px; }
+
+        .skill-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0 8px 8px 0;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        body.light-mode .skill-tag { background: rgba(0, 0, 0, 0.03); }
+
+        /* Projects Section */
+        .project-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s ease;
+        }
+        .project-card:hover { border-color: var(--accent-primary); box-shadow: 0 10px 40px rgba(56, 189, 248, 0.1); }
+
+        .project-header { padding: 50px; position: relative; }
+        .project-meta { font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .project-header h3 { font-size: 2.2rem; margin-bottom: 15px; letter-spacing: -1px; }
+
+        .btn-expand {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-expand:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--accent-primary); }
+        body.light-mode .btn-expand:hover { background: rgba(0, 0, 0, 0.03); }
+
+        /* Expandable Details */
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s ease;
+            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid transparent;
+            padding: 0 50px;
+        }
+        body.light-mode .project-details { background: rgba(0, 0, 0, 0.02); }
+
+        .project-details.active {
+            max-height: 2000px;
+            padding: 50px;
+            border-top-color: var(--glass-border);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .detail-item h4 { color: var(--accent-secondary); margin-bottom: 12px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;}
+        .detail-item h4::before { content: '▹'; color: var(--accent-primary); font-size: 1.4rem; }
+
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3.5rem; }
+            .project-header, .project-details.active { padding: 30px; }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 80px 0;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+        footer a { color: var(--text-main); font-weight: 600; text-decoration: none; margin: 0 15px; transition: color 0.3s; position: relative; }
+        footer a:hover { color: var(--accent-primary); }
+        footer a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
+            background-color: var(--accent-primary); transition: width 0.3s ease;
+        }
+        footer a:hover::after { width: 100%; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-logo">LG.</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Portfolio</a>
+                <button id="theme-toggle" class="theme-toggle">☀️ Light Mode</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero container">
+        <h1>Hi, I'm <span class="gradient-text">Luc Gerards</span>.</h1>
+        <h2>An Applied Data Science & AI student building scalable solutions by managing the complete lifecycle—from secure data engineering to production-ready MLOps.</h2>
+        <a href="#projects" class="btn-primary">Explore My Work</a>
+    </header>
+
+    <section id="about" class="container">
+        <h2 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 30px;">About Me & My Journey</h2>
+        <div style="font-size: 1.15rem; max-width: 850px; color: var(--text-muted);">
+            <p>
+                I am Luc Gerards, an Applied Data Science & AI student at Zuyd University of Applied Sciences, based in Maastricht. My journey into the world of tech started with a natural curiosity for problem-solving and a desire to uncover the hidden patterns behind complex systems.
+            </p>
+            <p>
+                <strong>Why this program?</strong><br>
+                I chose to study Applied Data Science & AI because I wanted to go beyond theoretical concepts and learn how to build tangible, intelligent systems that solve actual problems. I was fascinated by the idea of taking raw, chaotic data and engineering it into something that can predict outcomes, automate tasks, and drive real-world business decisions. The "Applied" aspect of my degree is incredibly important to me—I don't just want to understand how a machine learning algorithm works mathematically; I want to know how to containerize it, secure it, and deploy it for end-users.
+            </p>
+            <p>
+                <strong>My Philosophy</strong><br>
+                My approach to this field is simple: AI is not just about building an accurate model in an isolated Jupyter Notebook. True impact requires robust data engineering to build a reliable foundation, rigorous statistical modeling to uncover insights, and solid DevOps/AIOps principles to deploy those models reliably.
+            </p>
+            <p>
+                Currently, I am actively seeking an internship challenge where I can bring this full-stack data perspective to a professional environment, tackle real-world obstacles, and continue my continuous self-improvement.
+            </p>
+        </div>
+    </section>
+
+    <section id="skills" class="container">
+        <h2 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 20px;">Core Competencies</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>🛠 Data Engineering</h3>
+                <p>Building secure, efficient foundations for highly sensitive data architectures.</p>
+                <div>
+                    <span class="skill-tag">Python (ETL)</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Data Security (AES-256)</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>🧠 Machine Learning</h3>
+                <p>Deriving interpretable, predictive business value from complex datasets.</p>
+                <div>
+                    <span class="skill-tag">Scikit-Learn</span>
+                    <span class="skill-tag">Random Forest</span>
+                    <span class="skill-tag">CRISP-DM</span>
+                    <span class="skill-tag">RFECV</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>🚀 AIOps & Deployment</h3>
+                <p>Serving models reliably to end-users via robust, containerized architectures.</p>
+                <div>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">FastAPI</span>
+                    <span class="skill-tag">MLflow</span>
+                    <span class="skill-tag">ONNX Optimization</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="container" style="padding-top: 180px;">
+        <h2 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 10px;">Professional Portfolio</h2>
+        <p style="margin-bottom: 50px;">Select a project to explore the technical decisions, stakeholder impacts, and methodologies applied.</p>
+
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-meta">AIOps / Deployment • 8-Week Team Project</div>
+                <h3>House Prediction Service</h3>
+                <p>Designed a modular, containerized Machine Learning system to provide reliable property value estimates via a unified web service.</p>
+                <div style="margin-top: 15px;">
+                    <span class="skill-tag">Docker</span><span class="skill-tag">FastAPI</span><span class="skill-tag">ONNX</span>
+                </div>
+                <button class="btn-expand" onclick="toggleDetails('details-1', this)">View Full Details ↓</button>
+            </div>
+            <div id="details-1" class="project-details">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <h4>Goal & Relevance</h4>
+                        <p>The objective was to transition from isolated scripts to a production-ready system. This proves high-level competence in DevOps and MLOps, essential for ensuring modern ML scalability and portability.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Stakeholder Perspective</h4>
+                        <p>End-users require "trust and usability". This necessitated managing long inference times without frustrating the user, prioritizing an interface that securely separates business logic from presentation.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>My Role & Responsibilities</h4>
+                        <p>I focused on DevOps orchestration, managing Dockerfiles, docker-compose networks, and wiring the FastAPI backend, ONNX model, PostgreSQL database, and MLflow tracking server together with proper health checks.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Proudest Technical Decision</h4>
+                        <p><strong>ONNX Model Conversion.</strong> Instead of serving a standard scikit-learn model, converting it to an ONNX artifact reduced the file size by 45% and slashed API inference latency by 99.5%.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-meta">Predictive Modeling • 8-Week Team Project</div>
+                <h3>Predicting Cyclists' Performance</h3>
+                <p>Engineered an advanced Random Forest classification model for an investment firm (CAICLE) to predict professional cycling race outcomes for team recruitment.</p>
+                <div style="margin-top: 15px;">
+                    <span class="skill-tag">Python</span><span class="skill-tag">Random Forest</span><span class="skill-tag">RFECV</span>
+                </div>
+                <button class="btn-expand" onclick="toggleDetails('details-2', this)">View Full Details ↓</button>
+            </div>
+            <div id="details-2" class="project-details">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <h4>Goal & Relevance</h4>
+                        <p>To accurately identify high-potential riders. This project demonstrates core data science capabilities: handling highly imbalanced datasets, strict temporal data splitting, and evaluating models based on business-aligned metrics.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Stakeholder Perspective</h4>
+                        <p>The client needed actionable, interpretable recruitment intelligence. This drove the decision to utilize a Random Forest model, which provided clear feature importance allowing the business to understand *why* a cyclist was flagged.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>My Role & Responsibilities</h4>
+                        <p>Collaborated across the full CRISP-DM lifecycle. Conducted rigorous data preparation and temporal splitting to simulate a realistic prediction scenario, ensuring strictly no data leakage from future races.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Proudest Technical Decision</h4>
+                        <p><strong>Feature Reduction & Calibration.</strong> I utilized Recursive Feature Elimination with Cross-Validation (RFECV) to objectively reduce the feature space from 40 to 15. Furthermore, applied CalibratedClassifierCV and threshold tuning to correct ensemble overconfidence and maximize the F1-score for our imbalanced dataset.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-meta">Data Architecture / Security • 8-Week Team Project</div>
+                <h3>Healthcare Data Engineering</h3>
+                <p>Architected a highly secure Python ETL pipeline to integrate fragmented, sensitive medical datasets into a unified PostgreSQL warehouse.</p>
+                <div style="margin-top: 15px;">
+                    <span class="skill-tag">Python ETL</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">AES-256</span>
+                </div>
+                <button class="btn-expand" onclick="toggleDetails('details-3', this)">View Full Details ↓</button>
+            </div>
+            <div id="details-3" class="project-details">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <h4>Goal & Relevance</h4>
+                        <p>To establish a clean, queryable database layer. Without structured data engineering, downstream AI fails. This proves competence in foundational scripting, schema design, and data governance.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Stakeholder Perspective</h4>
+                        <p>Healthcare providers require strict adherence to the CIA triad (Confidentiality, Integrity, Availability). This forced a privacy-by-design approach, incorporating comprehensive security policies conforming to GDPR standards.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>My Role & Responsibilities</h4>
+                        <p>Executed high-intensity planning, Python ETL scripting, and database benchmarking. Played a key role in defining the system's AES-256 encryption implementation to safeguard patient records.</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Proudest Technical Decision</h4>
+                        <p><strong>PostgreSQL over NoSQL.</strong> Conducted a formal evaluation of database types. Selected PostgreSQL due to its superior bulk-loading efficiency (COPY commands) and absolute necessity for ACID transactional compliance in medical contexts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <div class="container">
+            <h2 class="gradient-text" style="font-size: 2rem; margin-bottom: 20px;">Let's Connect</h2>
+            <p>I am currently looking for an internship opportunity to apply my skills in a professional environment.</p>
+            <div style="margin: 40px 0;">
+                <a href="https://www.linkedin.com/in/luc-gerards-2a0499365/" target="_blank">LinkedIn Profile</a>
+                <a href="mailto:luc.gerards02@gmail.com">luc.gerards02@gmail.com</a>
+            </div>
+            <p style="font-size: 0.9rem; margin-top: 60px; opacity: 0.7;">
+                © 2026 Luc Gerards. Designed for the data-driven future.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            if (body.classList.contains('light-mode')) {
+                themeToggle.textContent = '🌙 Dark Mode';
+            } else {
+                themeToggle.textContent = '☀️ Light Mode';
+            }
+        });
+
+        // Accordion Expand/Collapse Logic for Projects
+        function toggleDetails(detailId, button) {
+            const details = document.getElementById(detailId);
+            const isActive = details.classList.contains('active');
+
+            // Close all currently open details for a cleaner UI experience
+            document.querySelectorAll('.project-details').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.btn-expand').forEach(btn => {
+                btn.innerHTML = 'View Full Details ↓';
+            });
+
+            // If the clicked one wasn't active, open it
+            if (!isActive) {
+                details.classList.add('active');
+                button.innerHTML = 'Close Details ↑';
+            }
+        }
+    </script>
+</body>
+</html>
