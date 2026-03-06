@@ -107,9 +107,67 @@
         .theme-toggle:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
 
         /* Hero Section */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+        .hero { min-height: 100vh; display: flex; align-items: center; }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            width: 100%;
+        }
+
+        .hero-text { flex: 1; text-align: left; }
+
         .hero h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -2px; }
-        .hero h2 { font-size: 1.4rem; font-weight: 400; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 700px; line-height: 1.6; }
+        .hero h2 { font-size: 1.4rem; font-weight: 400; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 650px; line-height: 1.6; }
+
+        /* Photo Container & Tinting Effects */
+        .hero-image-container {
+            flex: 0 0 320px;
+            width: 320px;
+            height: 320px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+            border: 3px solid var(--accent-primary);
+            transition: all 0.5s ease;
+        }
+        .hero-image-container:hover { transform: scale(1.03); box-shadow: 0 0 60px rgba(56, 189, 248, 0.5); }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.5s ease, all 0.5s ease;
+        }
+
+        /* The Blue Tint Overlay - UPDATED FOR SUBTLETY */
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-primary);
+            mix-blend-mode: color;
+            opacity: 0.4; /* Reduced to make the tint much less intrusive */
+            pointer-events: none;
+            transition: opacity 0.5s ease, all 0.5s ease;
+        }
+
+        /* Dark/Light mode tint adjustments */
+        body.light-mode .image-overlay { opacity: 0.2; } /* Very subtle in light mode */
+        body.light-mode .hero-image-container { box-shadow: 0 0 30px rgba(2, 132, 199, 0.15); }
+
+        /* Responsive scaling */
+        @media (max-width: 900px) {
+            .hero-content { flex-direction: column-reverse; text-align: center; gap: 40px;}
+            .hero-text { text-align: center; display: flex; flex-direction: column; align-items: center;}
+            .hero-image-container { flex: 0 0 220px; width: 220px; height: 220px; margin-top: 50px;}
+            .hero h1 { font-size: 3.5rem; }
+        }
 
         .btn-primary {
             display: inline-block;
@@ -255,9 +313,17 @@
     </nav>
 
     <header class="hero container">
-        <h1>Hi, I'm <span class="gradient-text">Luc Gerards</span>.</h1>
-        <h2>An Applied Data Science & AI student building scalable solutions by managing the complete lifecycle—from secure data engineering to production-ready MLOps.</h2>
-        <a href="#projects" class="btn-primary">Explore My Work</a>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Hi, I'm <span class="gradient-text">Luc Gerards</span>.</h1>
+                <h2>An Applied Data Science & AI student building scalable solutions by managing the complete lifecycle—from secure data engineering to production-ready MLOps.</h2>
+                <a href="#projects" class="btn-primary">Explore My Work</a>
+            </div>
+
+            <div class="hero-image-container">
+                <img src="20250801_224841-4525.jpg" alt="Luc Gerards" class="hero-image">
+                <div class="image-overlay"></div> </div>
+        </div>
     </header>
 
     <section id="about" class="container">
